@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_pagination/src/models/page_options.dart';
 import 'package:firebase_pagination/src/models/view_type.dart';
 import 'package:firebase_pagination/src/models/wrap_options.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 /// A [ScrollView] to use for the provided [items].
 ///
@@ -167,6 +168,26 @@ class BuildPagination<T> extends StatelessWidget {
           scrollBehavior: pageOptions.scrollBehavior,
           allowImplicitScrolling: pageOptions.allowImplicitScrolling,
           dragStartBehavior: pageOptions.dragStartBehavior,
+          itemCount: items.length + (isLoading ? 1 : 0),
+          itemBuilder: (BuildContext context, int index) {
+            if (index >= items.length) return bottomLoader;
+
+            return itemBuilder(context, items, index);
+          },
+        );
+
+      case ViewType.positionedList:
+        assert(
+          controller is ItemScrollController,
+          'controller must be of type ItemScrollController',
+        );
+        return ScrollablePositionedList.builder(
+          scrollDirection: scrollDirection,
+          reverse: reverse,
+          itemScrollController: controller as ItemScrollController,
+          physics: physics,
+          shrinkWrap: shrinkWrap,
+          padding: padding?.resolve(Directionality.of(context)),
           itemCount: items.length + (isLoading ? 1 : 0),
           itemBuilder: (BuildContext context, int index) {
             if (index >= items.length) return bottomLoader;
