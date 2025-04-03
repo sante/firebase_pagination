@@ -8,6 +8,9 @@ enum ViewType {
   /// Loads the data as a [ListView].
   list,
 
+  /// Loads the data as a [ScrollablePositionedList].
+  positionedList,
+
   /// Loads the data as a [GridView].
   grid,
 
